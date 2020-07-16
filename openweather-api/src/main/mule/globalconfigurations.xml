@@ -10,6 +10,6 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		<http:request-connection host="${openweather.host}" />
 	</http:request-config>
 	<http:request-config name="HTTP_Request_configuration1" doc:name="HTTP Request configuration" doc:id="40053121-2b5a-4a3b-9581-1a498ebf3940" basePath="/api" >
-		<http:request-connection host="localhost" port="8081" />
+		<http:request-connection host="localhost"/>
 	</http:request-config>
 	</mule>
