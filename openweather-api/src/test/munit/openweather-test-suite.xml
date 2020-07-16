@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+	xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<munit:config name="openweather-test-suite.xml" />
+	<munit:test name="openweather-test-suite-post:\weather:application\json:openweather-configTest" description="Test" doc:id="10c15a06-5367-4913-8688-64c7b8251972" >
+				<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="cf3eee30-6cbd-4939-802c-4b203a00db86" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="q" whereValue="Melbourne,AU" />
+					<munit-tools:with-attribute attributeName="APPID" whereValue="p(APPID)" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[MunitTools::getResourceAsString('response/OpenWeatherResponse.json')]" mediaType="application/json"/>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+		<munit:set-event doc:name="Set Event" doc:id="aeb67b67-9dad-4f2e-b456-3047305f0e3b" >
+				<munit:payload value="#[MunitTools::getResourceAsString('request/OpenWeatherRequest.json')]" mediaType="application/json"/>
+			</munit:set-event>
+			<http:request method="POST" doc:name="Request" doc:id="f55ba679-1324-4b60-bd72-8672e32688f5" config-ref="HTTP_Request_configuration1" path="/weather"/>
+		
+</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="a9c50efe-cce1-4b5f-aa7f-72af320933be" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+</mule>

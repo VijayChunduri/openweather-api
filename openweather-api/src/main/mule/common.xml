@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+		<flow name="openweatherRequest" doc:id="affa2945-0ccf-421d-a6ad-2ea389e73de9">
+		<logger level="INFO" doc:name="Request payload logger" doc:id="d83c5774-ed27-4b19-ada1-ebb6409647b0" message="Openweather Request :  #[payload]" />
+		<http:request method="GET" doc:name="openweather API Request" doc:id="3596b5ea-adbf-40f1-a241-214fbbbc831b" path="${openweather.path}" config-ref="HTTP_Request_configuration">
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"APPID" : vars.APPID,
+	"q" : (vars.citytimezone) ++ "," ++ (vars.countryCode.countryCode)
+}]]]></http:query-params>
+		</http:request>
+		<logger level="INFO" message="Openweather Response :  #[payload]" doc:name="Response payload logger"/>
+	
+	</flow>
+	</mule>

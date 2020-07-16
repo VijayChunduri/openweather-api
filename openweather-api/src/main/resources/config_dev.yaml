@@ -1,0 +1,13 @@
+listener:
+  port: "8081"
+APPID: c910f8d610e92eadedbade41466b9186
+openweather:
+  host: api.openweathermap.org
+  basepath: /data
+  path: /2.5/weather
+inputParameters:
+  firstName: firstName
+  lastName: lastName
+  city: city
+  country: country
+  citytimezone: city
