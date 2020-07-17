@@ -37,7 +37,7 @@ output application/json
 now() as Number]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<http:request method="GET" doc:name="Request" doc:id="7905e839-177b-4fcb-a1e3-b5072b5cd8f3" config-ref="HTTP_timezoneAPI_Request_Configuration" path="/api/timezone/json">
+		<http:request method="GET" doc:name="Request" doc:id="7905e839-177b-4fcb-a1e3-b5072b5cd8f3" config-ref="HTTP_timezoneAPI_Request_Configuration" path="${timezone.path}">
 			<http:query-params ><![CDATA[#[output application/java
 ---
 {

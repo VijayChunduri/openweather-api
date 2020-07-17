@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
 	  <configuration-properties doc:name="Configuration properties" doc:id="9456575d-bd9b-4898-92ab-b71201616f00" file="config_dev.yaml" />
 	<http:request-config name="HTTP_Openweather_Request_configuration" doc:name="HTTP Request configuration" doc:id="716df93b-1323-448c-ab0f-2cdaa0c95a38" basePath="${openweather.basepath}" >
 		<http:request-connection host="${openweather.host}" />
@@ -12,8 +13,9 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	<http:request-config name="HTTP_Munit_Request_configuration" doc:name="HTTP Request configuration" doc:id="40053121-2b5a-4a3b-9581-1a498ebf3940" basePath="/api" >
 		<http:request-connection host="localhost"/>
 	</http:request-config>
-	<http:request-config name="HTTP_timezoneAPI_Request_Configuration" doc:name="HTTP Request configuration" doc:id="4000c15f-e142-4d9c-b44d-12620be11210" basePath="/maps" >
-		<http:request-connection protocol="HTTPS" host="maps.googleapis.com" />
+	<http:request-config name="HTTP_timezoneAPI_Request_Configuration" doc:name="HTTP Request configuration" doc:id="4000c15f-e142-4d9c-b44d-12620be11210" basePath="${timezone.basepath}" >
+		<http:request-connection protocol="HTTPS" host="${timezone.host}" />
 	</http:request-config>
+	<api-gateway:autodiscovery apiId="16247422" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="dd6aff99-87ec-4b7e-bb6f-a6a9d0d8965a" flowRef="openweather-main" />
 	
 </mule>
