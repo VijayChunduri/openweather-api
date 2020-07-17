@@ -1,5 +1,3 @@
 %dw 2.0
-fun retrieveObject(payload,inputString) = payload filter ($.key ~= inputString) map(object,indexOfObject) -> {
-                inputString : object.value 
-    }
-
+import * from dw::core::Arrays
+fun retrieveObject(payload,inputString) = indexOf(payload.Header, inputString)

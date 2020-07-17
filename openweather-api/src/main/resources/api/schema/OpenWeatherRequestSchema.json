@@ -1,59 +1,47 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
     "$id": "http://example.com/example.json",
-    "type": "array",
+    "type": "object",
     "title": "The root schema",
     "description": "The root schema comprises the entire JSON document.",
-    "default": [],
+    "default": {},
     "examples": [
-        [
-            {
-                "key": "key",
-                "value": "value"
-            }
-        ]
+        {
+            "Header": [],
+            "Items": []
+        }
     ],
-    "additionalItems": true,
-    "items": {
-        "anyOf": [
-            {
-                "$id": "#/items/anyOf/0",
-                "type": "object",
-                "title": "The first anyOf schema",
-                "description": "An explanation about the purpose of this instance.",
-                "default": {},
-                "examples": [
-                    {
-                        "key": "key",
-                        "value": "value"
-                    }
-                ],
-               
-                "additionalProperties": true,
-                "properties": {
-                    "key": {
-                        "$id": "#/items/anyOf/0/properties/key",
-                        "type": "string",
-                        "title": "The key schema",
-                        "description": "An explanation about the purpose of this instance.",
-                        "default": "",
-                        "examples": [
-                            "key"
-                        ]
-                    },
-                    "value": {
-                        "$id": "#/items/anyOf/0/properties/value",
-                        "type": "string",
-                        "title": "The value schema",
-                        "description": "An explanation about the purpose of this instance.",
-                        "default": "",
-                        "examples": [
-                            "value"
-                        ]
-                    }
-                }
+    "additionalProperties": true,
+    "properties": {
+        "Header": {
+            "$id": "#/properties/Header",
+            "type": "array",
+            "title": "The Header schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": [],
+            "examples": [
+                []
+            ],
+            "additionalItems": true,
+            "items": {
+                "anyOf": [],
+                "$id": "#/properties/Header/items"
             }
-        ],
-        "$id": "#/items"
+        },
+        "Items": {
+            "$id": "#/properties/Items",
+            "type": "array",
+            "title": "The Items schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": [],
+            "examples": [
+                []
+            ],
+            "additionalItems": true,
+            "items": {
+                "anyOf": [],
+                "$id": "#/properties/Items/items"
+            }
+        }
     }
 }

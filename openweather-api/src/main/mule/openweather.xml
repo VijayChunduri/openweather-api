@@ -140,25 +140,25 @@ import modules::formatInput
 output application/json
 
 ---
-formatInput::retrieveObject(payload,p("inputParameters.city")).inputString[0]]]></ee:set-variable>
+payload.Items[formatInput::retrieveObject(payload,p("inputParameters.city"))]]]></ee:set-variable>
 				<ee:set-variable variableName="country" ><![CDATA[%dw 2.0
 import modules::formatInput
 output application/json
 
 ---
-formatInput::retrieveObject(payload,p("inputParameters.country")).inputString[0]]]></ee:set-variable>
+payload.Items[formatInput::retrieveObject(payload,p("inputParameters.country"))]]]></ee:set-variable>
 				<ee:set-variable variableName="firstName" ><![CDATA[%dw 2.0
 import modules::formatInput
 output application/json
 
 ---
-formatInput::retrieveObject(payload,p("inputParameters.firstName")).inputString[0] as String]]></ee:set-variable>
+payload.Items[formatInput::retrieveObject(payload,p("inputParameters.firstName"))]]]></ee:set-variable>
 				<ee:set-variable variableName="lastName" ><![CDATA[%dw 2.0
 import modules::formatInput
 output application/json
 
 ---
-formatInput::retrieveObject(payload,p("inputParameters.lastName")).inputString[0] as String]]></ee:set-variable>
+payload.Items[formatInput::retrieveObject(payload,p("inputParameters.lastName"))] as String]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<set-variable value="#[%dw 2.0
@@ -203,8 +203,6 @@ fun kelvintoCelcius(kelvin)= kelvin - 273.15
 fun calculateDateTime(dateTime)= now() >> dateTime as String 
  
 ---
-{  
-  "OpenWeatherResponse":
     {      
       "firstName": vars.firstName,
       "lastName":vars.lastName,
@@ -215,7 +213,6 @@ fun calculateDateTime(dateTime)= now() >> dateTime as String
       "city": vars.openweatherrespoonse.name as String,
       "location": payload.timeZoneId as String,
       "timeZone":payload.timeZoneName
-     }
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>

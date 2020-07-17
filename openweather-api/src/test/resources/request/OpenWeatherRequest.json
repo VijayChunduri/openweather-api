@@ -1,22 +1,4 @@
-[
-   {
-      "key":"firstName",
-      "value":"John"
-   },
-   {
-      "key":"lastName",
-      "value":"Smith"
-   },
-   {
-      "key":"datetime",
-      "value":"2020-01-01 10:00:01"
-   },
-   {
-      "key":"city",
-      "value":"Melbourne"
-   },
-   {
-      "key":"country",
-      "value":"Australia"
-   }
-]
+{
+    "Header": ["firstName", "lastName", "dateTime", "city", "country"],
+    "Items": ["John", "Smith", "2020-10-14", "Melbourne", "Australia"]
+}
