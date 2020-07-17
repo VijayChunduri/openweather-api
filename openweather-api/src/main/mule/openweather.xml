@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd ">
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
     <http:listener-config name="openweather-httpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="${listener.port}" />
     </http:listener-config>
@@ -180,29 +181,40 @@ output application/json
 		</ee:transform>
 				<logger level="INFO" doc:name="Log_variables" doc:id="399764a8-d2cc-4f79-b4f8-3680c25654e3" message="city,country,countrycode,firstname,lastname,citytimezone :  #[vars.city] #[vars.country] #[vars.countryCode] #[vars.firstName] #[vars.lastName] #[vars.citytimezone]" />
 		<flow-ref doc:name="Invoke_openweather request flow" doc:id="528167f5-c8b6-4ae0-be25-8cd0c7f7c1dc" name="openweatherRequest"/>
-					<ee:transform doc:name="Map_Response message" doc:id="1ee338ac-177d-45e7-82ab-88b629dd9417" >
+		<ee:transform doc:name="Set OpenweatherResponse variable" doc:id="537245fe-b8c0-4915-9ef5-63906ac6ce54" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="openweatherrespoonse" ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="Log_variables" doc:id="84f7e568-c981-474e-96be-25d9407567bc" message="city,country,countrycode,firstname,lastname,citytimezone :  #[vars.openweatherrespoonse]" />
+		<flow-ref doc:name="Invoke_GoogleTimezone API" doc:id="4062847a-93b5-4e36-a034-a4d960de4ca1" name="timezoneFlow" />
+		<ee:transform doc:name="Map_Response message" doc:id="1ee338ac-177d-45e7-82ab-88b629dd9417" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
-output application/json
-import java!com::timezone::TimezoneUtilList
+output application/json skipNullOn="everywhere"
 var firstName:String = vars.firstName
 var lastName:String = vars.lastName
 fun kelvintoCelcius(kelvin)= kelvin - 273.15
 fun calculateDateTime(dateTime)= now() >> dateTime as String 
-var zone = TimezoneUtilList::getTimezone(vars.country, vars.city) 
+ 
 ---
 {  
   "OpenWeatherResponse":
     {      
-      "name": vars.firstName,
+      "firstName": vars.firstName,
       "lastName":vars.lastName,
       "fullName": firstName ++ " " ++ lastName,
-      "dateTime": ((calculateDateTime(zone) as LocalDateTime {format: "yyyy-MM-dd HH:mm:ss.SSS"}) + |P1D|) as String {format: "yyyy-MM-dd HH:mm:ss.SSS"},
-      "temperatureCelcius": kelvintoCelcius(payload.main.temp as Number),
-      "offset": (now() >> zone) as DateTime {format: "Z"},
-      "city": payload.name as String,
-      "location": payload.sys.country as String,
-      "timeZone":zone
+      "dateTime": ((calculateDateTime(payload.timeZoneId) as LocalDateTime {format: "yyyy-MM-dd HH:mm:ss.SSS"}) + |P1D|) as String {format: "yyyy-MM-dd HH:mm:ss.SSS"},
+      "temperatureCelcius": kelvintoCelcius(vars.openweatherrespoonse.main.temp as Number) as Number {format: "#"},
+      "offset": (now() >> payload.timeZoneId) as DateTime {format: "Z"},
+      "city": vars.openweatherrespoonse.name as String,
+      "location": payload.timeZoneId as String,
+      "timeZone":payload.timeZoneName
      }
 }]]></ee:set-payload>
 			</ee:message>
